@@ -1,0 +1,73 @@
+<project>
+  <Metadata>
+    <metadata>
+      <PackageName>Custom Field Search</PackageName>
+      <Author>Mickey Rahman</Author>
+      <Version>1.0</Version>
+      <Revision />
+      <License />
+      <Comment />
+      <Attributes />
+      <Readme />
+      <Publisher />
+      <PostStep />
+      <PackageID />
+    </metadata>
+  </Metadata>
+  <SaveProject>True</SaveProject>
+  <Sources>
+    <xitems>
+      <Entries>
+        <x-item>/core/sitecore/content/Applications/Content Editor/Ribbons/Chunks/Field Search/{3180E271-C1D4-4DAE-8097-C66D9AD164E0}/invariant/0</x-item>
+        <x-item>/core/sitecore/content/Applications/Content Editor/Ribbons/Chunks/Field Search/Search/{D703C072-3438-4681-AC6A-56BA5B4C3CA9}/invariant/0</x-item>
+        <x-item>/core/sitecore/content/Applications/Content Editor/Ribbons/Strips/View/Search/{00101A09-57CE-4E34-A5E2-44A40ABE891D}/invariant/0</x-item>
+        <x-item>/core/sitecore/content/Applications/Custom Field Search/{A00BD24B-04F0-4218-B3F4-1370B99139B4}/invariant/0</x-item>
+        <x-item>/core/sitecore/content/Applications/Custom Field Search/Search/{A47BFB2F-68D2-43FB-8E7E-DD1C4A7CC005}/invariant/0</x-item>
+        <x-item>/core/sitecore/layout/Layouts/Custom Field Search/{0F19EE0F-7D45-42B9-9D58-3D07C6677864}/invariant/0</x-item>
+        <x-item>/core/sitecore/layout/Layouts/Custom Field Search/Search/{42D27891-B753-434D-9707-1E103D75C8B1}/invariant/0</x-item>
+      </Entries>
+      <SkipVersions>False</SkipVersions>
+      <Converter>
+        <ItemToEntryConverter>
+          <Transforms />
+        </ItemToEntryConverter>
+      </Converter>
+      <Include />
+      <Exclude />
+      <Name>Core-Items</Name>
+    </xitems>
+    <xfiles>
+      <Entries>
+        <x-item>/App_Config/Include/SC.CustomFieldSearch.config</x-item>
+        <x-item>/sitecore/shell/Applications/Custom Field Search/CustomFieldSearch.aspx</x-item>
+        <x-item>/bin/SC.CustomFieldSearch.dll</x-item>
+      </Entries>
+      <Converter>
+        <FileToEntryConverter>
+          <Root>/</Root>
+          <Transforms>
+            <InstallerConfigurationTransform>
+              <Options>
+                <BehaviourOptions>
+                  <ItemMode>Undefined</ItemMode>
+                  <ItemMergeMode>Undefined</ItemMergeMode>
+                </BehaviourOptions>
+              </Options>
+            </InstallerConfigurationTransform>
+          </Transforms>
+        </FileToEntryConverter>
+      </Converter>
+      <Include />
+      <Exclude />
+      <Name>Files</Name>
+    </xfiles>
+  </Sources>
+  <Converter>
+    <TrivialConverter>
+      <Transforms />
+    </TrivialConverter>
+  </Converter>
+  <Include />
+  <Exclude />
+  <Name />
+</project>

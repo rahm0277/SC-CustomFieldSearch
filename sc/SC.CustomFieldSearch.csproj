@@ -67,6 +67,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Data\packages\Sc.CustomFieldSearch-v1.0.xml" />
     <Content Include="sitecore\shell\Applications\Custom Field Search\CustomFieldSearch.aspx" />
   </ItemGroup>
   <ItemGroup>
