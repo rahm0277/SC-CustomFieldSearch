@@ -31,22 +31,31 @@ namespace SC.CustomFieldSearch.sitecore.shell.Applications.Custom_Field_Search {
         protected global::System.Web.UI.HtmlControls.HtmlForm customFieldSearchForm;
         
         /// <summary>
-        /// scriptManager1 control.
+        /// ScriptManager1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.ScriptManager scriptManager1;
+        protected global::System.Web.UI.ScriptManager ScriptManager1;
         
         /// <summary>
-        /// updSearch control.
+        /// UpdateProgress1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.UpdatePanel updSearch;
+        protected global::System.Web.UI.UpdateProgress UpdateProgress1;
+        
+        /// <summary>
+        /// UpdatePanel1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel UpdatePanel1;
         
         /// <summary>
         /// lblItemPath control.
@@ -83,6 +92,15 @@ namespace SC.CustomFieldSearch.sitecore.shell.Applications.Custom_Field_Search {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBox chkContains;
+        
+        /// <summary>
+        /// chkCaseSensitive control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chkCaseSensitive;
         
         /// <summary>
         /// btnSearch control.
@@ -128,15 +146,6 @@ namespace SC.CustomFieldSearch.sitecore.shell.Applications.Custom_Field_Search {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::ComponentArt.Web.UI.Grid Grid1;
-        
-        /// <summary>
-        /// LoadingFeedbackTemplate control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::ComponentArt.Web.UI.ClientTemplate LoadingFeedbackTemplate;
         
         /// <summary>
         /// SliderTemplate control.

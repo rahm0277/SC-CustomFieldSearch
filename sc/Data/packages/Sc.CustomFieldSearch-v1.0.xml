@@ -3,7 +3,7 @@
     <metadata>
       <PackageName>Custom Field Search</PackageName>
       <Author>Mickey Rahman</Author>
-      <Version>1.0</Version>
+      <Version>1.2</Version>
       <Revision />
       <License />
       <Comment />
@@ -60,6 +60,20 @@
       <Include />
       <Exclude />
       <Name>Files</Name>
+    </xfiles>
+    <xfiles>
+      <Entries>
+        <x-item>/sitecore/shell/Themes/Standard/ComponentArt/Grid/ajax-loader.gif</x-item>
+      </Entries>
+      <Converter>
+        <FileToEntryConverter>
+          <Root>/</Root>
+          <Transforms />
+        </FileToEntryConverter>
+      </Converter>
+      <Include />
+      <Exclude />
+      <Name />
     </xfiles>
   </Sources>
   <Converter>

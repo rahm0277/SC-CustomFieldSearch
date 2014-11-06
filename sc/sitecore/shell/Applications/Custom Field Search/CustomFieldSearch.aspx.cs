@@ -27,25 +27,15 @@ namespace SC.CustomFieldSearch.sitecore.shell.Applications.Custom_Field_Search
 {
     public partial class CustomFieldSearch : System.Web.UI.Page, IHasCommandContext
     {
-        /*
-        protected override void OnInit(EventArgs e)
-        {
-            Assert.ArgumentNotNull((object)e, "e");
-            base.OnInit(e);
-
-        }
-
-        protected override void OnLoad(EventArgs e)
-        {
-            Assert.ArgumentNotNull((object)e, "e");
-            base.OnLoad(e);
-        }
-        */
-
         private Item searchItemRoot { get; set; }
         private bool RebindRequired { get; set; }
 
        
+        /// <summary>
+        /// Setup the event handlers for the grid
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected void Page_Init(object sender, EventArgs e)
         {
             Grid1.PageIndexChanged += new ComponentArt.Web.UI.Grid.PageIndexChangedEventHandler(OnPageIndexChanged);
@@ -54,21 +44,42 @@ namespace SC.CustomFieldSearch.sitecore.shell.Applications.Custom_Field_Search
             
         }
 
+        /// <summary>
+        /// Event handler method to handle when a paging button is clicked
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
         public void OnPageIndexChanged(object sender, ComponentArt.Web.UI.GridPageIndexChangedEventArgs args)
         {
             Grid1.CurrentPageIndex = args.NewIndex;
         }
 
+        /// <summary>
+        /// Handler method for when the Grid needs a datasource to bind to
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="oArgs"></param>
         public void OnNeedDataSource(object sender, EventArgs oArgs)
         {
             Grid1.DataSource = buildGridData();
         }
 
+        /// <summary>
+        /// Handler method for when the grid needs to rebind the datasource (for reloads or paging events)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="oArgs"></param>
         public void OnNeedRebind(object sender, System.EventArgs oArgs)
         {
             Grid1.DataBind();
         }
 
+
+        /// <summary>
+        /// Page_load event
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected void Page_Load(object sender, EventArgs e)
         {
             pnlNoItem.Visible = false;
@@ -76,43 +87,58 @@ namespace SC.CustomFieldSearch.sitecore.shell.Applications.Custom_Field_Search
 
             string itemID = context.Parameters["itemid"].ToString();
 
-            Database masterDB = Sitecore.Configuration.Factory.GetDatabase("master");
-            searchItemRoot = masterDB.GetItem(new Sitecore.Data.ID(itemID));
+            Database db = Sitecore.Configuration.Factory.GetDatabase("master");
+            searchItemRoot = db.GetItem(new Sitecore.Data.ID(itemID));
             lblItemPath.Text = searchItemRoot.Paths.FullPath;
 
            
         }
 
-        private void GetItems(Item item, string fieldName, string fieldValue, List<Item> itemList, bool containsClause)
+        /// <summary>
+        /// Method to recursively get the item that matches the field value and field name being passed
+        /// TODO: see if we can use system lucene indexes for this
+        /// TODO: see if xpath will be faster here
+        /// </summary>
+        /// <param name="item">The root item where to start the search</param>
+        /// <param name="fieldName">The field name being searched on</param>
+        /// <param name="fieldValue">The field value being searched on</param>
+        /// <param name="itemList">The itemList is the final list of items that will get populated as a result of the search</param>
+        /// <param name="containsClause">Use a contains clause instead of a == clause</param>
+        /// <param name="caseInsensitive">Use ToLower(), i.e. make the lookup case insensitive</param>
+        private void GetItems(Item item, string fieldName, string fieldValue, List<Item> itemList, bool containsClause, bool caseInsensitive)
         {
+            var items = (IEnumerable<Item>)null;
             if(containsClause)
             {
-                var items = from i in item.Children.ToArray() where i.Fields[fieldName] != null && i.Fields[fieldName].ToString().Contains(fieldValue) select i;
-
-                if (items.ElementAtOrDefault(0) != null)
-                {
-                    itemList.AddRange(items.ToList());
-                }
-
+                if (caseInsensitive)
+                    items = from i in item.Children.ToArray() where i.Fields[fieldName] != null && i.Fields[fieldName].ToString().ToLower().Contains(fieldValue.ToLower()) select i;
+                else
+                    items = from i in item.Children.ToArray() where i.Fields[fieldName] != null && i.Fields[fieldName].ToString().Contains(fieldValue) select i;
             }
             else
             {
-                var items = from i in item.Children.ToArray() where i.Fields[fieldName] != null && i.Fields[fieldName].ToString() == fieldValue select i;
-
-                if (items.ElementAtOrDefault(0) != null)
-                {
-                    itemList.AddRange(items.ToList());
-                }
+                if(caseInsensitive)
+                    items = from i in item.Children.ToArray() where i.Fields[fieldName] != null && i.Fields[fieldName].ToString().ToLower() == fieldValue.ToLower() select i;
+                else
+                    items = from i in item.Children.ToArray() where i.Fields[fieldName] != null && i.Fields[fieldName].ToString() == fieldValue select i;
             }
-         
+
+            if (items.ElementAtOrDefault(0) != null)
+            {
+                itemList.AddRange(items.ToList());
+            }
 
             foreach(Item i in item.Children)
             {
-                GetItems(i, fieldName, fieldValue, itemList, containsClause);
+                GetItems(i, fieldName, fieldValue, itemList, containsClause, caseInsensitive);
             }
         }
 
-        private List<Item> buildGridData()
+        /// <summary>
+        /// Method to build the list of items for the Grid - also the method used in NeedDataSource grid event handler
+        /// </summary>
+        /// <returns></returns>
+        private IEnumerable<Item> buildGridData()
         {
             RebindRequired = true;
             Database masterDB = Sitecore.Configuration.Factory.GetDatabase("master");
@@ -120,9 +146,9 @@ namespace SC.CustomFieldSearch.sitecore.shell.Applications.Custom_Field_Search
             if (txtFieldName.Text.Trim() != "")
             {
 
-                GetItems(searchItemRoot, txtFieldName.Text.Trim(), txtFieldValue.Text.Trim(), itemList, chkContains.Checked);
+                GetItems(searchItemRoot, txtFieldName.Text.Trim(), txtFieldValue.Text.Trim(), itemList, chkContains.Checked, chkCaseSensitive.Checked);
 
-                if (itemList.Count == 0)
+                if (itemList.ToList().Count == 0)
                 {
                     pnlNoItem.Visible = true;
                     lblMsg.Text = "No items found.";
@@ -134,6 +160,12 @@ namespace SC.CustomFieldSearch.sitecore.shell.Applications.Custom_Field_Search
             return itemList;
         }
 
+
+        /// <summary>
+        /// Handler method for the search button click
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected void Search_Click(object sender, EventArgs e)
         {
             if (txtFieldName.Text.Trim() == "")
@@ -144,13 +176,17 @@ namespace SC.CustomFieldSearch.sitecore.shell.Applications.Custom_Field_Search
             }
             else
             {
+                Grid1.CurrentPageIndex = 0;
                 Grid1.DataSource = buildGridData();
                 Grid1.DataBind();
             }
         }
 
 
-
+        /// <summary>
+        /// Get the command context that this application was run from
+        /// </summary>
+        /// <returns></returns>
         public CommandContext GetCommandContext()
         {
             string itemID = WebUtil.GetQueryString("itemID");

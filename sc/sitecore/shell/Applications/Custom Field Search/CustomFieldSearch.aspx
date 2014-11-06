@@ -1,4 +1,6 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="CustomFieldSearch.aspx.cs" Inherits="SC.CustomFieldSearch.sitecore.shell.Applications.Custom_Field_Search.CustomFieldSearch" %>
+
+<%@ Register Assembly="System.Web.Extensions, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" Namespace="System.Web.UI" TagPrefix="asp" %>
 <%@ Register Assembly="Sitecore.Kernel" Namespace="Sitecore.Web.UI.HtmlControls" TagPrefix="sc" %>
 <%@ Register Assembly="Sitecore.Kernel" Namespace="Sitecore.Web.UI.WebControls" TagPrefix="sc" %>
 <%@ Register Assembly="Sitecore.Kernel" Namespace="Sitecore.Web.UI.WebControls.Ribbons" TagPrefix="sc" %>
@@ -20,12 +22,17 @@
     {
       overflow: hidden;
     }
+
+    .loadingPnl {
+      width: 100%; height: 100%; background-color: #808080; 
+      top: 0px; left: 0px; position: absolute; z-index: 9999;
+      opacity: 0.4;
+      filter: alpha(opacity=40);
+     }
   </style>
 
-  <script type="text/javascript" language="javascript">
 
 
-  </script>
   
 </head>
 <body style="background:transparent; height: 100%" id="PageBody" runat="server">
@@ -33,9 +40,21 @@
     <sc:AjaxScriptManager runat="server"/>
     <sc:ContinuationManager runat="server" />
     
-    <asp:ScriptManager ID="scriptManager1" runat="server" />
+    <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
 
-    <asp:UpdatePanel ID="updSearch" runat="server">
+          
+
+    <asp:UpdateProgress ID="UpdateProgress1" runat="server" DynamicLayout="false" DisplayAfter="1000">
+        <ProgressTemplate>
+             <table cellspacing="0" cellpadding="0" border="0" width="100%" class="loadingPnl">
+                <tr>
+                    <td style="font-size: 12px; text-align: center;"><img src="/sitecore/shell/themes/standard/componentart/grid/ajax-loader.gif"></td>
+                </tr>
+            </table>
+        </ProgressTemplate>
+    </asp:UpdateProgress>
+
+    <asp:UpdatePanel ID="UpdatePanel1" runat="server">
         <ContentTemplate>
             <table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
               <tr>
@@ -60,6 +79,10 @@
                                                <tr>
                                                    <td>&nbsp;</td>
                                                    <td><asp:CheckBox ID="chkContains" runat="server" /> Partial Lookup</td>
+                                               </tr>
+                                               <tr>
+                                                   <td>&nbsp;</td>
+                                                   <td><asp:CheckBox ID="chkCaseSensitive" runat="server" /> Case Insensitive</td>
                                                </tr>
                                                <tr>
                                                    <td>&nbsp;</td>
@@ -88,8 +111,6 @@
                                 PageSize="10"
                                 ImagesBaseUrl="/sitecore/shell/themes/standard/componentart/grid/"
                                 Width="100%" Height="100%"
-                                LoadingPanelClientTemplateId="LoadingFeedbackTemplate"
-                                LoadingPanelPosition="MiddleCenter"
                                 runat="server">
 
 
@@ -121,14 +142,7 @@
 
                                  <ClientTemplates>
                                    
-                                  <ComponentArt:ClientTemplate Id="LoadingFeedbackTemplate">
-                                      <table cellspacing="0" cellpadding="0" border="0">
-                                      <tr>
-                                        <td style="font-size:10px;"><sc:Literal Text="Loading..." runat="server" />;</td>
-                                        <td><img src="/sitecore/shell/themes/standard/componentart/grid/spinner.gif" width="16" height="16" border="0"></td>
-                                      </tr>
-                                    </table>
-                                  </ComponentArt:ClientTemplate>
+                   
               
                                   <ComponentArt:ClientTemplate Id="SliderTemplate">
                                     <table class="SliderPopup" cellspacing="0" cellpadding="0" border="0">
@@ -151,7 +165,14 @@
               </tr>
             </table>
             </ContentTemplate>
+       
     </asp:UpdatePanel>
+
+
+               
+          
+
+      
   </form>
 </body>
 </html>
